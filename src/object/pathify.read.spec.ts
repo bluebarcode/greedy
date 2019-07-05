@@ -164,7 +164,8 @@ describe('Pathify', () => {
       .equal(secondPath)
       .for(
         { entity: testInterfaceImplementation },
-        { entity: testInterfaceImplementation }
+        { entity: testInterfaceImplementation },
+        (f, s) => true
       );
     expect(result).toBeTruthy();
   });

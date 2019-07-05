@@ -1,11 +1,13 @@
 {
   "name": "aic-greedy",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.1-a",
+  "description": "A strongly typed library to write 'queries' on complex data structure. Including Consistency modifications (cascade delte, unset property on foreign key constraint violation)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "jest --config=jest.config.json",
+    "prepublish": "npm test"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,10 @@
   "dependencies": {
     "typescript": "3.4.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2"
+  },
   "keywords": []
 }

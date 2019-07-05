@@ -130,6 +130,11 @@ class Greedy<Flat, OriginType, T, PathVariablesType, Store>
     >;
     return param;
   }
+  unite<X extends keyof T>(
+    ...keys: Extract<keyof T, X>[]
+  ): TraversablePathType<T[X], Flat, OriginType, PathVariablesType, Store> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 /**
