@@ -1,0 +1,25 @@
+{
+  "name": "aic-greedy",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluebarcode/greedy.git"
+  },
+  "author": "Michael Adelmann",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bluebarcode/greedy/issues"
+  },
+  "homepage": "https://github.com/bluebarcode/greedy#readme",
+  "dependencies": {
+    "typescript": "3.4.5"
+  },
+  "devDependencies": {},
+  "keywords": []
+}
