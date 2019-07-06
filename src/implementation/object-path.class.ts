@@ -1,6 +1,6 @@
-import { PathType } from './models/path-type';
-import { TokenType } from './models/token-type.enum';
+import { PathType } from '../typings/path-type';
 import { pathify } from './path-wizard-pathify';
+import { TokenType } from './token-type.enum';
 
 export class ObjectPath<BaseType, PathVariablesType = any> {
   start = pathify(<BaseType>{}, <PathVariablesType>{});

@@ -1,4 +1,4 @@
-import { TraversablePathType } from './models/traversable-path.type';
+import { TraversablePathType } from '../typings/traversable-path.type';
 import { oc } from './path-wizard-pathify';
 
 export const chain = <

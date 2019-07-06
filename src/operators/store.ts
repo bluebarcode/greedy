@@ -1,9 +1,6 @@
-import { currentToken, OpFunc } from '../models/special-operations';
-import {
-  StateValues,
-  TraversablePathType
-} from '../models/traversable-path.type';
-import { oc } from '../path-wizard-pathify';
+import { oc } from '../implementation/path-wizard-pathify';
+import { currentToken, OpFunc } from '../typings/special-operations';
+import { StateValues } from '../typings/state-values';
 
 export function $store<T, Flat, PathVariables, StoreIn, StoreOut, OriginType>(
   storeFunc: (

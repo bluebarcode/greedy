@@ -1,4 +1,4 @@
-import { PathToken } from './models/path-token';
+import { PathToken } from '../typings/path-token';
 
 export const handleArraySearchWithProperty2 = (
   currentNode: any,

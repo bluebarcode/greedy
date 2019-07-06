@@ -1,7 +1,7 @@
+import { PathToken } from '../typings/path-token';
+import { PathType } from '../typings/path-type';
 import { flatten } from './flatten';
-import { PathToken } from './models/path-token';
-import { PathType } from './models/path-type';
-import { TokenType } from './models/token-type.enum';
+import { TokenType } from './token-type.enum';
 import { handleArraySearchWithProperty2, handleSimpleArray2 } from './write';
 
 const copyProperties = {

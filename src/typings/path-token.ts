@@ -1,5 +1,5 @@
-import { TokenType } from './token-type.enum';
-import { StateValues } from './traversable-path.type';
+import { TokenType } from '../implementation/token-type.enum';
+import { StateValues } from './state-values';
 
 export interface PathToken {
   unsetIfUnresolved?: boolean;

@@ -1,8 +1,4 @@
-import { PathToken } from './path-token';
-
-export interface PathType<ReturnType> {
-  get(): PathToken[];
-}
+import { PathType } from './path-type';
 
 export interface ValidationType<Flat> extends PathType<boolean> {
   reduce(

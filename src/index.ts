@@ -1,4 +1,4 @@
-export { PathType } from './object/models/path-type';
-export { TraversablePathType } from './object/models/traversable-path.type';
-export { ObjectPath } from './object/object-path.class';
-export { PathWizard } from './object/path-wizard';
+export { ObjectPath } from './implementation/object-path.class';
+export { PathWizard } from './implementation/path-wizard';
+export { PathType } from './typings/path-type';
+export { TraversablePathType } from './typings/traversable-path.type';

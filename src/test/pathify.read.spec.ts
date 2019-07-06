@@ -1,9 +1,9 @@
-import { chain } from './chain';
-import { does } from './equals';
-import { ObjectPath } from './object-path.class';
-import { $map } from './operators/map';
-import { $store } from './operators/store';
-import { PathWizard } from './path-wizard';
+import { PathWizard } from '..';
+import { chain } from '../implementation/chain';
+import { does } from '../implementation/equals';
+import { ObjectPath } from '../implementation/object-path.class';
+import { $map } from '../operators/map';
+import { $store } from '../operators/store';
 
 interface TestInterface {
   rootString: string;

@@ -1,4 +1,4 @@
-import { TraversablePathType } from './models/traversable-path.type';
+import { TraversablePathType } from '../typings/traversable-path.type';
 import { PathWizard } from './path-wizard';
 
 type compatibleType<FirstFlat, SecondFlat, T> = FirstFlat extends SecondFlat

@@ -1,11 +1,10 @@
-import { PathToken } from './models/path-token';
-import { PathType, ValidationType } from './models/path-type';
-import { SpecialOperations } from './models/special-operations';
-import { TokenType } from './models/token-type.enum';
-import {
-  StateValues,
-  TraversablePathType
-} from './models/traversable-path.type';
+import { PathToken } from '../typings/path-token';
+import { PathType } from '../typings/path-type';
+import { SpecialOperations } from '../typings/special-operations';
+import { StateValues } from '../typings/state-values';
+import { TraversablePathType } from '../typings/traversable-path.type';
+import { ValidationType } from '../typings/validation-type';
+import { TokenType } from './token-type.enum';
 
 class Greedy<Flat, OriginType, T, PathVariablesType, Store>
   implements SpecialOperations<Flat, OriginType, T, PathVariablesType, Store> {

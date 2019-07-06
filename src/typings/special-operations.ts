@@ -1,6 +1,8 @@
 import { PathToken } from './path-token';
-import { PathType, ValidationType } from './path-type';
-import { StateValues, TraversablePathType } from './traversable-path.type';
+import { PathType } from './path-type';
+import { StateValues } from './state-values';
+import { TraversablePathType } from './traversable-path.type';
+import { ValidationType } from './validation-type';
 
 /**
  * disable linter for the empty type
@@ -165,9 +167,6 @@ export interface SpecialOperations<
       pathVariables: StateValues<PathVariablesType, Store>
     ) => boolean
   ): Flat extends true ? PathType<boolean> : ValidationType<boolean>;
-  // unite<X extends keyof T>(
-  //   key1: X
-  // ): TraversablePathType<T[X], Flat, OriginType, PathVariablesType, Store>;
   unite<X extends keyof T>(
     ...keys: Extract<keyof T, X>[]
   ): TraversablePathType<T[X], Flat, OriginType, PathVariablesType, Store>;

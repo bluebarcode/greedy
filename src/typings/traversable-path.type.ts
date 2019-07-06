@@ -1,9 +1,5 @@
+import { KeysOfType } from './key-of-type';
 import { SpecialOperations } from './special-operations';
-
-export type KeysOfType<T, TProp> = keyof Pick<
-  T,
-  { [K in keyof T]: T[K] extends TProp ? K : never }[keyof T]
->;
 
 type ObjectWrapper<Flat, OriginType, T, PathVariablesType, Store> = {
   [K in keyof T]-?: TraversablePathType<
@@ -14,10 +10,7 @@ type ObjectWrapper<Flat, OriginType, T, PathVariablesType, Store> = {
     Store
   >
 };
-export interface StateValues<PathVariablesType, Store> {
-  path: PathVariablesType;
-  store: Store;
-}
+
 interface All<Flat, OriginType, T, PathVariablesType, Store> {
   $_$: SpecialOperations<Flat, OriginType, T, PathVariablesType, Store>;
 }
