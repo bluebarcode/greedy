@@ -1,5 +1,5 @@
-import { TraversablePathType } from '../typings/traversable-path.type';
-import { oc } from './path-wizard-pathify';
+import { TraversableGreedyType } from '../typings/traversable-path.type';
+import { proxy } from './path-wizard-pathify';
 
 export const chain = <
   BT,
@@ -13,9 +13,9 @@ export const chain = <
   BStore,
   EStore
 >(
-  basePath: TraversablePathType<BT, BFlat, BOrigin, BPV, BStore>,
-  extensionPath: TraversablePathType<ET, EFlat, EOrigin, EPV, EStore>
-): TraversablePathType<
+  basePath: TraversableGreedyType<BT, BFlat, BOrigin, BPV, BStore>,
+  extensionPath: TraversableGreedyType<ET, EFlat, EOrigin, EPV, EStore>
+): TraversableGreedyType<
   ET,
   EFlat extends true ? (BFlat extends true ? true : false) : false,
   BOrigin,
@@ -28,17 +28,23 @@ export const chain = <
     extensionTokens.length - 1,
     extensionTokens.length
   );
-  return oc(
+
+  /**
+   * @todo
+   * any => workaround for error:
+   * "Type instantiation is excessively deep and possibly infinite."
+   */
+  return proxy(
     basePath.$_$.finish()
       .get()
       .concat(extensionPath.$_$.finish().get()),
     currentToken[0],
-    currentToken[0].property
-  ) as TraversablePathType<
+    Array.isArray(currentToken[0].property) ? '' : currentToken[0].property
+  ) as any; /*TraversablePathType<
     ET,
     EFlat extends true ? (BFlat extends true ? true : false) : false,
     BOrigin,
     EPV & BPV,
     BStore & EStore
-  >;
+  >;*/
 };
