@@ -6,45 +6,59 @@ export const handleArraySearchWithProperty2 = (
   store: any,
   branchKey: string
 ) => {
-  if (
-    currentNode[token.property] &&
-    Array.isArray(currentNode[token.property])
-  ) {
-    let originalArray = currentNode[token.property];
-    if (token.removeIfUndefined) {
-      if (!store.$_$[branchKey]) {
-        // original array not yet stored
-        // first apperence on this array
-        store.$_$[branchKey] = originalArray;
-        currentNode[token.property] = [];
-      } else {
-        originalArray = store.$_$[branchKey];
+  if (!Array.isArray(token.property)) {
+    if (
+      currentNode[token.property] &&
+      Array.isArray(currentNode[token.property])
+    ) {
+      let originalArray = currentNode[token.property];
+      if (token.removeIfUndefined) {
+        if (!store.$_$[branchKey]) {
+          // original array not yet stored
+          // first apperence on this array
+          store.$_$[branchKey] = originalArray;
+          currentNode[token.property] = [];
+        } else {
+          originalArray = store.$_$[branchKey];
+        }
       }
+      let desiredEntry;
+      if (token.keepIf) {
+        desiredEntry = (originalArray as any[]).filter(entry =>
+          token.keepIf
+            ? token.keepIf(entry, { path: store, store: store })
+            : false
+        );
+      } else {
+        desiredEntry = (originalArray as any[]).filter(
+          entry =>
+            entry[token.entryProperty as string] === token.index ||
+            entry[token.entryProperty as string] === +token.index
+        );
+      }
+      if (desiredEntry && token.removeIfUndefined) {
+        for (let index = 0; index < desiredEntry.length; index++) {
+          if (currentNode[token.property].indexOf(desiredEntry[index]) === -1) {
+            currentNode[token.property].push(desiredEntry[index]);
+          }
+        }
+      }
+      currentNode = desiredEntry.length > 0 ? desiredEntry[0] : desiredEntry;
     }
-    const desiredEntry = (originalArray as any[]).find(
-      entry =>
-        entry[token.entryProperty as string] === token.index ||
-        entry[token.entryProperty as string] === +token.index
-    );
-    if (desiredEntry && token.removeIfUndefined) {
-      currentNode[token.property].push(desiredEntry);
-    }
-    currentNode = desiredEntry;
   }
   return currentNode;
 };
-export const handleSimpleArray2 = (
-  currentNode: any,
-  parsedToken: PathToken
-) => {
-  if (
-    currentNode[parsedToken.property] &&
-    Array.isArray(currentNode[parsedToken.property])
-  ) {
-    currentNode = currentNode[parsedToken.property][parsedToken.index];
-  } else if (currentNode[parsedToken.property]) {
-    // This means it is no array! and we will not override it
-    console.error('This is no Array!:', currentNode[parsedToken.property]);
+export const handleSimpleArray2 = (currentNode: any, token: PathToken) => {
+  if (!Array.isArray(token.property)) {
+    if (
+      currentNode[token.property] &&
+      Array.isArray(currentNode[token.property])
+    ) {
+      currentNode = currentNode[token.property][token.index];
+    } else if (currentNode[token.property]) {
+      // This means it is no array! and we will not override it
+      console.error('This is no Array!:', currentNode[token.property]);
+    }
   }
   return currentNode;
 };
