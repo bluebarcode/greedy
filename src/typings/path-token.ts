@@ -2,12 +2,14 @@ import { TokenType } from '../implementation/token-type.enum';
 import { StateValues } from './state-values';
 
 export interface PathToken {
+  keepIf?: (value: any, pathVariables: StateValues<any, any>) => boolean;
+  uniteKey?: string;
   unsetIfUnresolved?: boolean;
   hashFunction?: (data: any) => string;
   removeIfUndefined?: boolean;
   pipe?: PipeSummary[];
   type: TokenType;
-  property: string;
+  property: string | string[];
   entryProperty?: string;
   index?: any;
   defaultValue?: any;
@@ -15,6 +17,7 @@ export interface PathToken {
   validator?: (data: any, pathVariables: StateValues<any, any>) => boolean;
   reducer?: (previous: boolean, current: boolean) => boolean;
   initialValue?: boolean;
+  branchKey?: string;
 }
 
 interface PipeSummary {

@@ -2,7 +2,7 @@ import { PathToken } from '../typings/path-token';
 import { PathType } from '../typings/path-type';
 import { SpecialOperations } from '../typings/special-operations';
 import { StateValues } from '../typings/state-values';
-import { TraversablePathType } from '../typings/traversable-path.type';
+import { TraversableGreedyType } from '../typings/traversable-path.type';
 import { ValidationType } from '../typings/validation-type';
 import { TokenType } from './token-type.enum';
 
@@ -21,17 +21,10 @@ class Greedy<Flat, OriginType, T, PathVariablesType, Store>
     };
   }
   pipe(...transformators: ((data: any) => any)[]): any {
-    if (this.currentToken && this.currentToken.type !== TokenType.pipe) {
-      this.currentToken = { property: '', type: TokenType.pipe };
-      this.previousTokens = [...this.previousTokens, this.currentToken];
-    }
-    if (this.currentToken) {
-      this.currentToken.type = TokenType.pipe;
-    }
-    let param = (oc(
+    let param = (proxy(
       this.previousTokens,
       this.currentToken
-    ) as unknown) as TraversablePathType<
+    ) as unknown) as TraversableGreedyType<
       T,
       Flat,
       OriginType,
@@ -40,7 +33,7 @@ class Greedy<Flat, OriginType, T, PathVariablesType, Store>
     transformators.forEach(transformator => (param = transformator(param)));
     return param;
   }
-  backToRoot(): TraversablePathType<
+  backToRoot(): TraversableGreedyType<
     OriginType,
     Flat,
     OriginType,
@@ -49,10 +42,10 @@ class Greedy<Flat, OriginType, T, PathVariablesType, Store>
   > {
     this.currentToken = { property: '', type: TokenType.ctrl_back_to_root };
     this.previousTokens = [...this.previousTokens, this.currentToken];
-    return (oc(
+    return (proxy(
       this.previousTokens,
       this.currentToken
-    ) as unknown) as TraversablePathType<
+    ) as unknown) as TraversableGreedyType<
       OriginType,
       Flat,
       OriginType,
@@ -87,7 +80,7 @@ class Greedy<Flat, OriginType, T, PathVariablesType, Store>
       }
     } as Flat extends true ? PathType<boolean> : ValidationType<boolean>;
   }
-  removeIfUnvisited(): TraversablePathType<
+  removeIfUnvisited(): TraversableGreedyType<
     T,
     Flat,
     OriginType,
@@ -97,18 +90,19 @@ class Greedy<Flat, OriginType, T, PathVariablesType, Store>
     if (this.currentToken) {
       this.currentToken.removeIfUndefined = true;
     }
-    const param = (oc(
+    const param = (proxy(
       this.previousTokens,
       this.currentToken
-    ) as unknown) as TraversablePathType<
+    ) as unknown) as TraversableGreedyType<
       T,
       Flat,
       OriginType,
-      PathVariablesType
+      PathVariablesType,
+      Store
     >;
     return param;
   }
-  unsetIfUnresolved(): TraversablePathType<
+  unsetIfUnresolved(): TraversableGreedyType<
     T,
     Flat,
     OriginType,
@@ -118,21 +112,42 @@ class Greedy<Flat, OriginType, T, PathVariablesType, Store>
     if (this.currentToken) {
       this.currentToken.unsetIfUnresolved = true;
     }
-    const param = (oc(
+    const param = (proxy(
       this.previousTokens,
       this.currentToken
-    ) as unknown) as TraversablePathType<
+    ) as unknown) as TraversableGreedyType<
       T,
       Flat,
       OriginType,
-      PathVariablesType
+      PathVariablesType,
+      Store
     >;
     return param;
   }
-  unite<X extends keyof T>(
-    ...keys: Extract<keyof T, X>[]
-  ): TraversablePathType<T[X], Flat, OriginType, PathVariablesType, Store> {
-    throw new Error('Method not implemented.');
+
+  keepIf(
+    filter: (
+      value: T extends any[] ? T[number] : T,
+      pathVariables: StateValues<PathVariablesType, Store>
+    ) => boolean
+  ): TraversableGreedyType<T, Flat, OriginType, PathVariablesType, Store> {
+    if (this.currentToken) {
+      this.currentToken.removeIfUndefined = true;
+      this.currentToken.keepIf = filter;
+      this.currentToken.type = TokenType.array_dynamic_property_index;
+    }
+    const param = (proxy(
+      this.previousTokens,
+      this.currentToken
+    ) as unknown) as TraversableGreedyType<
+      T,
+      Flat,
+      OriginType,
+      PathVariablesType,
+      Store
+    >;
+
+    return param;
   }
 }
 
@@ -148,26 +163,14 @@ export const pathify = <T, PathVariablesType = any>(
   data: T,
   pathVariables?: PathVariablesType
 ) => {
-  return oc<T, PathVariablesType>([]);
+  return proxy<T, PathVariablesType>([]);
 };
 
-const hash = (object: any): string => {
-  const stringified = JSON.stringify(object);
-  return stringified
-    .split('')
-    .reduce(function(a, b) {
-      // tslint:disable-next-line:no-bitwise
-      a = (a << 5) - a + b.charCodeAt(0);
-      // tslint:disable-next-line:no-bitwise
-      return a & a;
-    }, 0)
-    .toString();
-};
-export function oc<ocT, PathVariablesType>(
+export function proxy<ocT, PathVariablesType>(
   previousTokens: PathToken[],
   currentToken?: PathToken,
   propertyName?: string | number | symbol
-): TraversablePathType<ocT, true, ocT, PathVariablesType> {
+): TraversableGreedyType<ocT, true, ocT, PathVariablesType> {
   const localTokens = previousTokens;
   return new Proxy(
     /**
@@ -183,14 +186,14 @@ export function oc<ocT, PathVariablesType>(
           currentToken.type = TokenType.array_dynamic_index;
           currentToken.index = arg1;
         }
-        return oc(previousTokens, currentToken);
+        return proxy(previousTokens, currentToken);
       } else if (propertyName === 'all') {
         // Map to all Array
         if (currentToken) {
           currentToken.type = TokenType.array_all;
           currentToken.hashFunction = <any>arg1;
         }
-        return oc(previousTokens, currentToken);
+        return proxy(previousTokens, currentToken);
       } else if (propertyName === 'filter') {
         // Map to filtered array
         if (currentToken) {
@@ -198,7 +201,7 @@ export function oc<ocT, PathVariablesType>(
           currentToken.entryProperty = arg1;
           currentToken.index = arg2;
         }
-        return oc(previousTokens, currentToken);
+        return proxy(previousTokens, currentToken);
       } else if (propertyName === 'finish') {
         // finish call
         return localTokens;
@@ -209,17 +212,17 @@ export function oc<ocT, PathVariablesType>(
           currentToken.entryProperty = arg1;
           currentToken.index = arg2;
         }
-        return oc(previousTokens, currentToken);
+        return proxy(previousTokens, currentToken);
       } else if (typeof arg1 !== 'undefined') {
         // Set Default value
         if (currentToken) {
           currentToken.defaultValue = arg1;
         }
-        return oc(previousTokens, currentToken, propertyName);
+        return proxy(previousTokens, currentToken, propertyName);
       } else {
-        return oc(previousTokens, currentToken, propertyName); // Property access
+        return proxy(previousTokens, currentToken, propertyName); // Property access
       }
-    }) as TraversablePathType<ocT, true, ocT, PathVariablesType>,
+    }) as TraversableGreedyType<ocT, true, ocT, PathVariablesType>,
     {
       get: (target, key) => {
         if (
@@ -228,7 +231,7 @@ export function oc<ocT, PathVariablesType>(
           key === 'all' ||
           key === 'filter'
         ) {
-          return oc(previousTokens, currentToken, key);
+          return proxy(previousTokens, currentToken, key);
         } else if (key === '$_$') {
           const newGreedyObj = new Greedy(previousTokens, currentToken);
           return newGreedyObj; // Muss gebindet sein sonst wird die funktion vom Proxy aus aufgerufen - besser wäre hier eigentlich das Objekt als ganzes zurückzugeben und dann den User callen zu lassen, aber die Typisierung von Typescript bekommt hier ein Problem
@@ -237,7 +240,7 @@ export function oc<ocT, PathVariablesType>(
           property: key.toString(),
           type: TokenType.property
         };
-        return oc([...previousTokens, newToken], newToken);
+        return proxy([...previousTokens, newToken], newToken);
       }
     }
   );

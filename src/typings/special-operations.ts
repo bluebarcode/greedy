@@ -1,7 +1,7 @@
 import { PathToken } from './path-token';
 import { PathType } from './path-type';
 import { StateValues } from './state-values';
-import { TraversablePathType } from './traversable-path.type';
+import { TraversableGreedyType } from './traversable-path.type';
 import { ValidationType } from './validation-type';
 
 /**
@@ -10,6 +10,9 @@ import { ValidationType } from './validation-type';
 // tslint:disable-next-line
 type EmptyGeneric = {};
 
+/**
+ * The function structure an operator function for $_$.pipe() has to return.
+ */
 export type OpFunc<
   TIn,
   TOut = any,
@@ -20,14 +23,14 @@ export type OpFunc<
   StoreOut = any,
   OriginType = any
 > = (
-  source: TraversablePathType<
+  source: TraversableGreedyType<
     TIn,
     FlatIn,
     OriginType,
     PathVariablesType,
     StoreIn
   >
-) => TraversablePathType<
+) => TraversableGreedyType<
   TOut,
   FlatOut,
   OriginType,
@@ -35,14 +38,23 @@ export type OpFunc<
   StoreOut
 >;
 
-export const currentToken = <T>(
-  path: TraversablePathType<T, {}>
+/**
+ * A Helper function that retrieves the current(=last) token of a Path. Used in Operator functions.
+ * TODO: Maybe it is not needed for the user to do, but for the framework to provide the current token at the places needed.
+ * @param path
+ */
+export const currentToken = <T, A, B, C, D>(
+  path: TraversableGreedyType<T, A, B, C, D>
 ): { tokens: PathToken[]; current: PathToken } => {
   const tokens = path.$_$.finish().get();
   const current = tokens.slice(tokens.length - 1, tokens.length)[0];
   return { tokens, current };
 };
 
+/**
+ * This Type determines the last of the 9 Types that are passed that is not empty. This is used at the $_$.pipe() function.
+ * TODO: Make this recursive.
+ */
 type LastNonUndefinedType<
   A,
   B = EmptyGeneric,
@@ -71,6 +83,9 @@ type LastNonUndefinedType<
     : H
   : I;
 
+/**
+ * This Interface provides all special operations that are available to manipulate the path. If new functions are to be defined it is most likely to be done here.
+ */
 export interface SpecialOperations<
   Flat,
   OriginType,
@@ -78,14 +93,20 @@ export interface SpecialOperations<
   PathVariablesType,
   Store
 > {
-  removeIfUnvisited(): TraversablePathType<
+  keepIf(
+    filter: (
+      value: T extends any[] ? T[number] : T,
+      pathVariables: StateValues<PathVariablesType, Store>
+    ) => boolean
+  ): TraversableGreedyType<T, Flat, OriginType, PathVariablesType, Store>;
+  removeIfUnvisited(): TraversableGreedyType<
     T,
     Flat,
     OriginType,
     PathVariablesType,
     Store
   >;
-  unsetIfUnresolved(): TraversablePathType<
+  unsetIfUnresolved(): TraversableGreedyType<
     T,
     Flat,
     OriginType,
@@ -146,15 +167,19 @@ export interface SpecialOperations<
       dStoreOut,
       OriginType
     >
-  ): TraversablePathType<
+  ): TraversableGreedyType<
     LastNonUndefinedType<aTOut, bTOut, cTOut, dTOut>,
     LastNonUndefinedType<aFOut, bFOut, cFOut, dFOut>,
     OriginType,
     PathVariablesType,
     LastNonUndefinedType<aStoreOut, bStoreOut, cStoreOut, dStoreOut>
   >;
-  finish(): PathType<Flat extends true ? T : T[]>;
-  backToRoot(): TraversablePathType<
+  finish(): PathType<
+    Flat extends true ? T : T[],
+    OriginType,
+    PathVariablesType
+  >;
+  backToRoot(): TraversableGreedyType<
     OriginType,
     Flat,
     OriginType,
@@ -167,7 +192,10 @@ export interface SpecialOperations<
       pathVariables: StateValues<PathVariablesType, Store>
     ) => boolean
   ): Flat extends true ? PathType<boolean> : ValidationType<boolean>;
-  unite<X extends keyof T>(
-    ...keys: Extract<keyof T, X>[]
-  ): TraversablePathType<T[X], Flat, OriginType, PathVariablesType, Store>;
+  // unite<X extends keyof T>(
+  //   key1: X
+  // ): TraversablePathType<T[X], Flat, OriginType, PathVariablesType, Store>;
+  // unite<X extends keyof T>(
+  //   ...keys: Extract<keyof T, X>[]
+  // ): TraversablePathType<T[X], Flat, OriginType, PathVariablesType, Store>;
 }
