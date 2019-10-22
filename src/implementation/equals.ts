@@ -1,4 +1,4 @@
-import { TraversablePathType } from '../typings/traversable-path.type';
+import { TraversableGreedyType } from '../typings/traversable-greedy.type';
 import { PathWizard } from './path-wizard';
 
 type compatibleType<FirstFlat, SecondFlat, T> = FirstFlat extends SecondFlat
@@ -10,10 +10,10 @@ type compatibleType<FirstFlat, SecondFlat, T> = FirstFlat extends SecondFlat
   : T;
 
 export const does = <T, FirstFlat, FirstOrigin, FirstPV = void>(
-  firstPath: TraversablePathType<T, FirstFlat, FirstOrigin, FirstPV>
+  firstPath: TraversableGreedyType<T, FirstFlat, FirstOrigin, FirstPV>
 ) => ({
   equal: <SecondOrigin, SecondFlat, SecondPV = void>(
-    secondPath: TraversablePathType<
+    secondPath: TraversableGreedyType<
       compatibleType<FirstFlat, SecondFlat, T>,
       SecondFlat,
       SecondOrigin,

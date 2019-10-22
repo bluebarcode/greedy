@@ -3,7 +3,7 @@ import { TokenType } from '../implementation/token-type.enum';
 import { PathToken } from '../typings/path-token';
 import { currentToken, OpFunc } from '../typings/special-operations';
 import { StateValues } from '../typings/state-values';
-import { TraversableGreedyType } from '../typings/traversable-path.type';
+import { TraversableGreedyType } from '../typings/traversable-greedy.type';
 
 export function $filter<T, Flat, OriginType, PathVariables, Store>(
   filterFunc: (

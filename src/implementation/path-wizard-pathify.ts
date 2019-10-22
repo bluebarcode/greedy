@@ -2,7 +2,7 @@ import { PathToken } from '../typings/path-token';
 import { PathType } from '../typings/path-type';
 import { SpecialOperations } from '../typings/special-operations';
 import { StateValues } from '../typings/state-values';
-import { TraversableGreedyType } from '../typings/traversable-path.type';
+import { TraversableGreedyType } from '../typings/traversable-greedy.type';
 import { ValidationType } from '../typings/validation-type';
 import { TokenType } from './token-type.enum';
 

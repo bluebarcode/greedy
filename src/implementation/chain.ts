@@ -1,4 +1,4 @@
-import { TraversableGreedyType } from '../typings/traversable-path.type';
+import { TraversableGreedyType } from '../typings/traversable-greedy.type';
 import { proxy } from './path-wizard-pathify';
 
 export const chain = <

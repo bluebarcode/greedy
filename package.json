@@ -1,12 +1,12 @@
 {
   "name": "aic-greedy",
-  "version": "0.0.1-a",
+  "version": "0.0.1-c",
   "description": "A strongly typed library to write 'queries' on complex data structure. Including Consistency modifications (cascade delte, unset property on foreign key constraint violation)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest --config=jest.config.json",
+    "test": "jest --config=jest.config.js",
     "prepublish": "npm test"
   },
   "repository": {

@@ -1,7 +1,7 @@
 import { PathToken } from './path-token';
 import { PathType } from './path-type';
 import { StateValues } from './state-values';
-import { TraversableGreedyType } from './traversable-path.type';
+import { TraversableGreedyType } from './traversable-greedy.type';
 import { ValidationType } from './validation-type';
 
 /**
