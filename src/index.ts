@@ -1,3 +1,5 @@
+export { chain } from './implementation/chain';
+export { does } from './implementation/equals';
 export { ObjectPath } from './implementation/object-path.class';
 export { PathWizard } from './implementation/path-wizard';
 export { $filter } from './operators/filter';
