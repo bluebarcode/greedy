@@ -1,3 +1,16 @@
-# greedy
+# Get Greedy!
 
-A strongly typed library to write 'queries' on complex data structure. Including Consistency modifications (cascade delte, unset property on foreign key constraint violation)
+This library provides
+
+- deep
+- typed
+- null safe
+- Ahead of time (?)
+
+data retrieval **and** data manipulation aswell as data **consistency** in complex Typescript data structures.
+
+## Wait what?
+
+Imagine i18n keys or _paths_. It´s some kind of AOT data retrieval mechanism. But instead of strings - you can use it for everything in a datastructure. And you get type support in the making of your _paths_ aswell as in dataretrieval. Also you can pass in variables - so the retrieval is dynamic! Also you can not only read from, but also write to these _paths_.
+
+## Example
