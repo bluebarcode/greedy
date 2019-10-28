@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/bluebarcode/greedy#readme",
   "dependencies": {
-    "typescript": "3.4.5"
+    "typescript": "3.4.5",
+    "rxjs": "6.5.3"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
