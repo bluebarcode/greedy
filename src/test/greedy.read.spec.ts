@@ -1,9 +1,9 @@
-import { PathWizard } from '..';
-import { chain } from '../implementation/chain';
-import { does } from '../implementation/equals';
-import { ObjectPath } from '../implementation/object-path.class';
-import { $map } from '../operators/map';
-import { $store } from '../operators/store';
+import { PathWizard } from '../../packages/greedy/src';
+import { chain } from '../../packages/greedy/src/implementation/chain';
+import { does } from '../../packages/greedy/src/implementation/equals';
+import { ObjectPath } from '../../packages/greedy/src/implementation/object-path.class';
+import { $map } from '../../packages/greedy/src/operators/map';
+import { $store } from '../../packages/greedy/src/operators/store';
 import { unitTestProjectData } from './data/pm/pm.data';
 import { EStatus, Module, Project } from './data/pm/pm.types';
 

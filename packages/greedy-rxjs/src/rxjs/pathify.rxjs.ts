@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PathType, PathWizard } from '..';
+import { PathType, PathWizard } from '../../../greedy/src';
 
 export const mapPath = <ReturnType, InputType, Flat, PathVariables, Store>(
   path: PathType<ReturnType, InputType, PathVariables>,

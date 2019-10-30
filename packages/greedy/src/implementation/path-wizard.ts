@@ -1,3 +1,4 @@
+import { TraversableGreedyType } from '..';
 import { PathToken } from '../typings/path-token';
 import { PathType } from '../typings/path-type';
 import { flatten } from './flatten';
@@ -15,32 +16,31 @@ const copyProperties = {
 };
 export class PathWizard {
   public static updatePath<A, C, OriginType, PathVariableType, Y>(
-    // path1: A extends TraversablePathType<
-    //   infer T,
-    //   infer Flat,
-    //   OriginType,
-    //   PathVariableType,
-    //   infer Store
-    // >
-    //   ? A
-    //   : never,
-    // ...paths: (C extends TraversablePathType<
-    //   infer T,
-    //   infer Flat,
-    //   OriginType,
-    //   PathVariableType,
-    //   infer Store
-    // >
-    //   ? C
-    //   : never)[]
-    ...allPaths: any[]
+    path1: A extends TraversableGreedyType<
+      infer T,
+      infer Flat,
+      OriginType,
+      PathVariableType,
+      infer Store
+    >
+      ? A
+      : never,
+    ...paths: (C extends TraversableGreedyType<
+      infer T,
+      infer Flat,
+      OriginType,
+      PathVariableType,
+      infer Store
+    >
+      ? C
+      : never)[] // ...allPaths: any[]
   ) {
     return {
       with: (
         baseEntity: OriginType,
         dynamicVariables?: PathVariableType
       ): OriginType => {
-        allPaths.forEach((path, index) => {
+        [path1, ...paths].forEach((path, index) => {
           const tokens = path.$_$.finish().get();
           const store = {};
           //console.log('TOKENS', tokens);

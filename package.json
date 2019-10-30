@@ -1,13 +1,13 @@
 {
   "name": "aic-greedy",
-  "version": "0.0.1-g",
   "description": "A strongly typed library to write 'queries' on complex data structure. Including Consistency modifications (cascade delte, unset property on foreign key constraint violation)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest --config=jest.config.js",
-    "prepublish": "npm test"
+    "prepublish": "npm test",
+    "publish": "lerna run build && lerna publish"
   },
   "repository": {
     "type": "git",
@@ -19,13 +19,11 @@
     "url": "https://github.com/bluebarcode/greedy/issues"
   },
   "homepage": "https://github.com/bluebarcode/greedy#readme",
-  "dependencies": {
-    "typescript": "3.4.5",
-    "rxjs": "6.5.3"
-  },
   "devDependencies": {
+    "typescript": "3.4.5",
     "@types/jest": "^24.0.15",
     "jest": "^24.8.0",
+    "lerna": "^3.18.3",
     "ts-jest": "^24.0.2"
   },
   "keywords": []
