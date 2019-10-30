@@ -1,5 +1,6 @@
 {
   "name": "@aic-greedy/core",
+  "description": "A strongly typed library to write 'queries' on complex data structure. Including Consistency modifications (cascade delte, unset property on foreign key constraint violation)",
   "extends": "../../tsconfig.json",
   "version": "0.1.0",
   "compilerOptions": {
@@ -11,8 +12,7 @@
     "./src"
   ],
   "scripts": {
-    "build": "tsc",
-    "test": "jest --config=jest.config.js",
-    "prepublish": "npm test"
-  }
+    "build": "tsc"
+  },
+  "gitHead": "fd093a858ec2cc1b64f8342a87e48b07d5e7d170"
 }
