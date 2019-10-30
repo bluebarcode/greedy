@@ -18,7 +18,7 @@
     "build": "tsc"
   },
   "publishConfig": {
-    "acess": "public"
+    "access": "public"
   },
-  "gitHead": "6ce9ec2bfd3d12e1de0fa0a73789e593d3212e46"
+  "gitHead": "c52ebf9f097033314ea369abe7c2bbd983575998"
 }
