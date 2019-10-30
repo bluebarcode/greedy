@@ -24,7 +24,7 @@ export interface Food {
   diet: Diet;
 }
 export interface Supplier {
-  supplier: Person;
+  supplier: string;
   foods: Food[];
   beverages: Beverage[];
 }

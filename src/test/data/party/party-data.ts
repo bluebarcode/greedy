@@ -77,13 +77,17 @@ export const Deathstar1: Party = {
   participants: [Luke, Leia, Anakin, r2d2],
   name: 'Battle of Yavin',
   suppliers: [
-    { beverages: [Vodka, EnergyDrink], foods: [Zucchini], supplier: Anakin },
+    {
+      beverages: [Vodka, EnergyDrink],
+      foods: [Zucchini],
+      supplier: Anakin.name
+    },
     {
       beverages: [Gin, Tonic],
       foods: [GarlicBread, GarlicSauce],
-      supplier: JarJar // Jar Jar is not Invited/ does no participate
+      supplier: JarJar.name // Jar Jar is not Invited/ does no participate
     },
-    { beverages: [Wine], foods: [Ketchup], supplier: Leia } // Ketchup & Wine??? (-> Not Desired)
+    { beverages: [Wine], foods: [Ketchup], supplier: Leia.name } // Ketchup & Wine??? (-> Not Desired)
   ]
 };
 
