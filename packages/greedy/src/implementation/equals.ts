@@ -26,8 +26,8 @@ export const does = <T, FirstFlat, FirstOrigin, FirstPV = void>(
       comparisonFunction: (
         first: FirstFlat extends true ? T : T[],
         Second: SecondFlat extends true
-          ? compatibleType<FirstFlat, SecondFlat, T>
-          : compatibleType<FirstFlat, SecondFlat, T>[]
+          ? NonNullable<compatibleType<FirstFlat, SecondFlat, T>>
+          : NonNullable<compatibleType<FirstFlat, SecondFlat, T>>[]
       ) => boolean
     ): boolean => {
       const firstResult = PathWizard.getValueFromPathify(
