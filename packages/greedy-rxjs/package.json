@@ -11,6 +11,9 @@
   "include": [
     "./src"
   ],
+  "directories": {
+    "dist": "dist"
+  },
   "peerDependencies": {
     "rxjs": "6.5.3"
   },

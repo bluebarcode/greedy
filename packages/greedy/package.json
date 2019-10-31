@@ -11,6 +11,9 @@
   "include": [
     "./src"
   ],
+  "directories": {
+    "dist": "dist"
+  },
   "scripts": {
     "build": "tsc"
   },
