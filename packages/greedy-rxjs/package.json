@@ -2,7 +2,7 @@
   "name": "@aic-greedy/rxjs",
   "description": "A RXJS oprerator to be used with @aic-greedy/base",
   "extends": "../../tsconfig.json",
-  "version": "0.1.6-alpha.0",
+  "version": "0.1.6-alpha.1",
   "compilerOptions": {
     "outDir": "./dist"
   },

@@ -2,7 +2,7 @@
   "name": "@aic-greedy/core",
   "description": "A strongly typed library to write 'queries' on complex data structure. Including Consistency modifications (cascade delte, unset property on foreign key constraint violation)",
   "extends": "../../tsconfig.json",
-  "version": "0.1.6-alpha.0",
+  "version": "0.1.6-alpha.1",
   "compilerOptions": {
     "outDir": "./dist"
   },
