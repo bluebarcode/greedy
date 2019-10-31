@@ -83,6 +83,6 @@ export type TraversableGreedyType<
   OriginType = any,
   PathVariablesType = any,
   Store = any
-> = All<Flat, OriginType, T, PathVariablesType, Store> &
+> = All<Flat, OriginType, NonNullable<T>, PathVariablesType, Store> &
   DataWrapper<Flat, OriginType, NonNullable<T>, PathVariablesType, Store> &
-  DefaultValueable<Flat, OriginType, T, PathVariablesType, Store>;
+  DefaultValueable<Flat, OriginType, NonNullable<T>, PathVariablesType, Store>;
