@@ -2,7 +2,10 @@ import { PathToken } from '../typings/path-token';
 import { PathType } from '../typings/path-type';
 import { SpecialOperations } from '../typings/special-operations';
 import { StateValues } from '../typings/state-values';
-import { TraversableGreedyType } from '../typings/traversable-greedy.type';
+import {
+  Endpoint,
+  TraversableGreedyType
+} from '../typings/traversable-greedy.type';
 import { ValidationType } from '../typings/validation-type';
 import { TokenType } from './token-type.enum';
 
@@ -58,27 +61,36 @@ class Greedy<Flat, OriginType, T, PathVariablesType, Store>
       value: T,
       pathVariables: StateValues<PathVariablesType, Store>
     ) => boolean
-  ): Flat extends true ? PathType<boolean> : ValidationType<boolean> {
+  ): Flat extends true
+    ? Endpoint<Flat, OriginType, boolean>
+    : Endpoint<Flat, OriginType, boolean> & ValidationType<boolean> {
     let previousTokens = this.previousTokens;
     previousTokens = [
       ...previousTokens,
       { type: TokenType.validIf, property: '', validator: validator }
     ];
-    return {
-      get() {
-        return previousTokens;
-      },
-      reduce(reducer, initialValue) {
+    const vt = {
+      $token: previousTokens,
+      reduce(
+        func: (previous: boolean, current: boolean) => boolean,
+        initialValue: boolean
+      ): Endpoint<Flat, OriginType, boolean> {
         return {
-          get() {
-            return [
-              { property: '', type: TokenType.reduce, reducer, initialValue },
-              ...previousTokens
-            ];
-          }
+          $token: [
+            {
+              property: '',
+              type: TokenType.reduce,
+              reducer: func,
+              initialValue
+            },
+            ...previousTokens
+          ]
         };
       }
-    } as Flat extends true ? PathType<boolean> : ValidationType<boolean>;
+    };
+    return (<any>vt) as Flat extends true
+      ? Endpoint<Flat, OriginType, boolean>
+      : Endpoint<Flat, OriginType, boolean> & ValidationType<boolean>;
   }
   removeIfUnvisited(): TraversableGreedyType<
     T,
@@ -158,6 +170,14 @@ class Greedy<Flat, OriginType, T, PathVariablesType, Store>
  * Keep in mind - As this returns a function, it will not work in Observables - but it will in Subjects.
  * @param data The data object that detrmines the base Type
  */
+class test implements ValidationType<true> {
+  reduce(
+    func: (previous: boolean, current: boolean) => boolean,
+    initialValue: boolean
+  ): Endpoint<true, any, boolean, any, any> {
+    throw new Error('Method not implemented.');
+  }
+}
 
 export const pathify = <T, PathVariablesType = any>(
   data: T,
@@ -235,6 +255,8 @@ export function proxy<ocT, PathVariablesType>(
         } else if (key === '$_$') {
           const newGreedyObj = new Greedy(previousTokens, currentToken);
           return newGreedyObj; // Muss gebindet sein sonst wird die funktion vom Proxy aus aufgerufen - besser wäre hier eigentlich das Objekt als ganzes zurückzugeben und dann den User callen zu lassen, aber die Typisierung von Typescript bekommt hier ein Problem
+        } else if (key === '$token') {
+          return previousTokens;
         }
         const newToken = {
           property: key.toString(),

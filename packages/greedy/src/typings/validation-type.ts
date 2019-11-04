@@ -1,8 +1,8 @@
-import { PathType } from './path-type';
+import { Endpoint } from './traversable-greedy.type';
 
-export interface ValidationType<Flat> extends PathType<boolean> {
+export interface ValidationType<Flat> {
   reduce(
     func: (previous: boolean, current: boolean) => boolean,
     initialValue: boolean
-  ): PathType<boolean>;
+  ): Endpoint<Flat, any, boolean>;
 }

@@ -1,4 +1,5 @@
 import { KeysOfType } from './key-of-type';
+import { PathToken } from './path-token';
 import { SpecialOperations } from './special-operations';
 
 /***
@@ -21,10 +22,22 @@ export interface StateValues<PathVariablesType, Store> {
   store: Store;
 }
 
+export interface Endpoint<
+  Flat,
+  OriginType = any,
+  T = any,
+  PathVariablesType = any,
+  Store = any
+> {
+  $token: PathToken[];
+  a?: [Flat, OriginType, T, PathVariablesType, Store];
+  //$_$: SpecialOperations<Flat, OriginType, T, PathVariablesType, Store>;
+}
+
 /***
  * This interface is used just to extend all Greedy Types to implement the $_$ keyword for extended processing.
  * */
-interface All<Flat, OriginType, T, PathVariablesType, Store> {
+export interface All<Flat, OriginType, T, PathVariablesType, Store> {
   $_$: SpecialOperations<Flat, OriginType, T, PathVariablesType, Store>;
 }
 
@@ -83,6 +96,7 @@ export type TraversableGreedyType<
   OriginType = any,
   PathVariablesType = any,
   Store = any
-> = All<Flat, OriginType, NonNullable<T>, PathVariablesType, Store> &
+> = Endpoint<Flat, OriginType, T, PathVariablesType, Store> &
+  All<Flat, OriginType, T, PathVariablesType, Store> &
   DataWrapper<Flat, OriginType, NonNullable<T>, PathVariablesType, Store> &
-  DefaultValueable<Flat, OriginType, NonNullable<T>, PathVariablesType, Store>;
+  DefaultValueable<Flat, OriginType, T, PathVariablesType, Store>;

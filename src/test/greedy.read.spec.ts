@@ -10,10 +10,7 @@ import { EStatus, Module, Project } from './data/pm/pm.types';
 describe('Pathify Read', () => {
   it('Unfiltered Array', () => {
     const test = new ObjectPath<Project>();
-    const mappedStringProperty = test.start.modules
-      .all()
-      .tasks.all()
-      .status.$_$.finish();
+    const mappedStringProperty = test.start.modules.all().tasks.all().status;
     const arrayResult = PathWizard.getValueFromPathify(
       mappedStringProperty,
       unitTestProjectData,
@@ -33,8 +30,7 @@ describe('Pathify Read', () => {
     const mappedStringProperty = test.start.modules
       .all()
       .tasks.all()
-      .assignee.$_$.pipe($map(assigneeId => assigneeId + 1))
-      .$_$.finish();
+      .assignee.$_$.pipe($map(assigneeId => assigneeId + 1));
     const stringResult = PathWizard.getValueFromPathify(
       mappedStringProperty,
       unitTestProjectData,
@@ -49,7 +45,7 @@ describe('Pathify Read', () => {
     const basePath = new ObjectPath<Project>();
     const baseProperty = basePath.start.modules.all();
     const extensionPath = new ObjectPath<Module>().start.tasks.all().assignee;
-    const combinedPath = chain(baseProperty, extensionPath).$_$.finish(); // Must be string[]!!!
+    const combinedPath = chain(baseProperty, extensionPath); // Must be string[]!!!
     const stringResult = PathWizard.getValueFromPathify(
       combinedPath,
       unitTestProjectData,
@@ -69,8 +65,7 @@ describe('Pathify Read', () => {
           return { status: val };
         }),
         $map((val, pv) => [pv.store.status])
-      )
-      .$_$.finish();
+      );
     const stringResult = PathWizard.getValueFromPathify(
       mappedStringProperty,
       unitTestProjectData,
@@ -86,7 +81,7 @@ describe('Pathify Read', () => {
 
 describe('Pathify Read', () => {
   it('Equals function', () => {
-    const test = new ObjectPath<Project>();
+    const test = new ObjectPath<Project, {}>();
     const firstPath = test.start.modules
       .all()
       .tasks.all()
@@ -125,7 +120,7 @@ describe('Pathify Read', () => {
       )
       .$_$.backToRoot().name;
     const result = PathWizard.getValueFromPathify(
-      firstPath.$_$.finish(),
+      firstPath,
       unitTestProjectData,
       undefined
     );

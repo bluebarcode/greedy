@@ -6,7 +6,7 @@ import { currentToken, OpFunc } from '../typings/special-operations';
 type fixedStoreVariables = 'unite1' | 'unite2' | 'unite3' | 'unite4' | 'unite5'; // When this issue is resolved https://github.com/microsoft/TypeScript/issues/13573 we can build it dynamically
 type Mapped = { [P in fixedStoreVariables]: string };
 
-interface UniteKeys {
+export interface UniteKeys {
   unite1: string;
   unite2: string;
   unite3: string;

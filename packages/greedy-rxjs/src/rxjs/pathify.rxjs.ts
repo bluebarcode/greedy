@@ -1,9 +1,10 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PathType, PathWizard } from '../../../greedy/src';
+import { PathWizard } from '../../../greedy/src';
+import { Endpoint } from '../../../greedy/src/typings/traversable-greedy.type';
 
 export const mapPath = <ReturnType, InputType, Flat, PathVariables, Store>(
-  path: PathType<ReturnType, InputType, PathVariables>,
+  path: Endpoint<Flat, InputType, ReturnType, PathVariables>,
   variables: PathVariables
 ) => (source: Observable<InputType>) => {
   return source.pipe(

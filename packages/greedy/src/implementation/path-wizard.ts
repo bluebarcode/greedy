@@ -1,6 +1,6 @@
-import { TraversableGreedyType } from '..';
 import { PathToken } from '../typings/path-token';
 import { PathType } from '../typings/path-type';
+import { Endpoint } from '../typings/traversable-greedy.type';
 import { flatten } from './flatten';
 import { TokenType } from './token-type.enum';
 import { handleArraySearchWithProperty2, handleSimpleArray2 } from './write';
@@ -15,33 +15,16 @@ const copyProperties = {
   }
 };
 export class PathWizard {
-  public static updatePath<A, C, OriginType, PathVariableType, Y>(
-    path1: A extends TraversableGreedyType<
-      infer T,
-      infer Flat,
-      OriginType,
-      PathVariableType,
-      infer Store
-    >
-      ? A
-      : never,
-    ...paths: (C extends TraversableGreedyType<
-      infer T,
-      infer Flat,
-      OriginType,
-      PathVariableType,
-      infer Store
-    >
-      ? C
-      : never)[] // ...allPaths: any[]
+  public static updatePath<OriginType, PathVariableType>(
+    ...paths: Endpoint<any, OriginType, any, PathVariableType, any>[]
   ) {
     return {
       with: (
         baseEntity: OriginType,
         dynamicVariables?: PathVariableType
       ): OriginType => {
-        [path1, ...paths].forEach((path, index) => {
-          const tokens = path.$_$.finish().get();
+        [...paths].forEach((path, index) => {
+          const tokens = path.$token;
           const store = {};
           //console.log('TOKENS', tokens);
           this.updatePathInternal(
@@ -53,7 +36,7 @@ export class PathWizard {
             ''
           );
         });
-        return baseEntity;
+        return <OriginType>baseEntity;
       }
     };
   }
@@ -349,13 +332,13 @@ export class PathWizard {
     return baseEntity;
   }
 
-  static getValueFromPathify<ReturnType>(
-    path: PathType<ReturnType>,
-    baseEntity: any,
-    dynamicValues: any
-  ): ReturnType {
-    const pathResult = PathWizard.getValueFromPath<ReturnType>(
-      path.get(),
+  static getValueFromPathify<ReturnType, OriginType, Flat, PathVariableType>(
+    path: Endpoint<Flat, OriginType, ReturnType, PathVariableType>,
+    baseEntity: OriginType,
+    dynamicValues: PathVariableType
+  ): Flat extends true ? ReturnType : ReturnType[] {
+    const pathResult = PathWizard.getValueFromPath<ReturnType, Flat>(
+      path.$token,
       baseEntity,
       dynamicValues,
       baseEntity,
@@ -374,13 +357,13 @@ export class PathWizard {
     }
     return () => true;
   }
-  private static getValueFromPath<T>(
+  private static getValueFromPath<T, Flat>(
     tokens: PathToken[],
     baseEntity: any,
     dynamicValues: any,
     originEntity: any,
     store: any
-  ): T {
+  ): Flat extends true ? T : T[] {
     let currentValue = baseEntity;
     for (let index = 0; index < tokens.length; index++) {
       const token = tokens[index];
@@ -415,7 +398,7 @@ export class PathWizard {
             }
             index = tokens.length;
           } else {
-            return <T>(<unknown>[]);
+            return <any>[];
           }
         } else if (token.type === TokenType.ctrl_back_to_root) {
           currentValue = originEntity; // Reset to root element again - but the dynamic variables remain

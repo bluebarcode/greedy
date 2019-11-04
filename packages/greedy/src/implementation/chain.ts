@@ -23,7 +23,7 @@ export const chain = <
   BStore & EStore
 > => {
   // Let´s hope that the current Token is not necessary (it would only be necessary if the user directly calls a function after combine.)
-  const extensionTokens = extensionPath.$_$.finish().get();
+  const extensionTokens = extensionPath.$token;
   const currentToken = extensionTokens.slice(
     extensionTokens.length - 1,
     extensionTokens.length
@@ -35,9 +35,7 @@ export const chain = <
    * "Type instantiation is excessively deep and possibly infinite."
    */
   return proxy(
-    basePath.$_$.finish()
-      .get()
-      .concat(extensionPath.$_$.finish().get()),
+    basePath.$token.concat(extensionPath.$token),
     currentToken[0],
     Array.isArray(currentToken[0].property) ? '' : currentToken[0].property
   ) as any; /*TraversablePathType<

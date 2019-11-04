@@ -14,9 +14,7 @@ describe('Pathify', () => {
       'id',
       'moduleId'
     );
-    const pathifiedStream = stream.pipe(
-      mapPath(path.$_$.finish(), { moduleId: 1 })
-    );
+    const pathifiedStream = stream.pipe(mapPath(path, { moduleId: 1 }));
     pathifiedStream.subscribe(result => {
       expect(result.name).toEqual('Backend');
     });

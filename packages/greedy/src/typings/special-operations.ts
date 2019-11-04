@@ -1,7 +1,7 @@
 import { PathToken } from './path-token';
 import { PathType } from './path-type';
 import { StateValues } from './state-values';
-import { TraversableGreedyType } from './traversable-greedy.type';
+import { Endpoint, TraversableGreedyType } from './traversable-greedy.type';
 import { ValidationType } from './validation-type';
 
 /**
@@ -46,7 +46,7 @@ export type OpFunc<
 export const currentToken = <T, A, B, C, D>(
   path: TraversableGreedyType<T, A, B, C, D>
 ): { tokens: PathToken[]; current: PathToken } => {
-  const tokens = path.$_$.finish().get();
+  const tokens = path.$token;
   const current = tokens.slice(tokens.length - 1, tokens.length)[0];
   return { tokens, current };
 };
@@ -174,11 +174,7 @@ export interface SpecialOperations<
     PathVariablesType,
     LastNonUndefinedType<aStoreOut, bStoreOut, cStoreOut, dStoreOut>
   >;
-  finish(): PathType<
-    Flat extends true ? T : T[],
-    OriginType,
-    PathVariablesType
-  >;
+
   backToRoot(): TraversableGreedyType<
     OriginType,
     Flat,
@@ -191,11 +187,20 @@ export interface SpecialOperations<
       value: T,
       pathVariables: StateValues<PathVariablesType, Store>
     ) => boolean
-  ): Flat extends true ? PathType<boolean> : ValidationType<boolean>;
+  ): Flat extends true
+    ? Endpoint<Flat, OriginType, boolean>
+    : Endpoint<Flat, OriginType, boolean> & ValidationType<boolean>;
   // unite<X extends keyof T>(
   //   key1: X
   // ): TraversablePathType<T[X], Flat, OriginType, PathVariablesType, Store>;
   // unite<X extends keyof T>(
   //   ...keys: Extract<keyof T, X>[]
   // ): TraversablePathType<T[X], Flat, OriginType, PathVariablesType, Store>;
+}
+export interface Finish<Flat, OriginType, T, PathVariablesType, Store> {
+  finish(): PathType<
+    Flat extends true ? T : T[],
+    OriginType,
+    PathVariablesType
+  >;
 }
