@@ -21,7 +21,10 @@ export interface StateValues<PathVariablesType, Store> {
   path: PathVariablesType;
   store: Store;
 }
-
+/**
+ * Endpoint to avoice Excessively deep Types. But the Generic Types HAVE to be used - else you cannot further process them in other functions.
+ * This is the proper Way to access all types of a Path.
+ */
 export interface Endpoint<
   Flat,
   OriginType = any,
@@ -30,7 +33,7 @@ export interface Endpoint<
   Store = any
 > {
   $token: PathToken[];
-  a?: [Flat, OriginType, T, PathVariablesType, Store];
+  $______?: [Flat, OriginType, T, PathVariablesType, Store];
   //$_$: SpecialOperations<Flat, OriginType, T, PathVariablesType, Store>;
 }
 
